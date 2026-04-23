@@ -346,7 +346,7 @@ var icons = {
 
 
 function afficherPoints(ord) {
-    $.getJSON('http://localhost/Base_Géomatique_SI/api/reseau.php?ordre=' + ord, function(result) {
+    $.getJSON('http://localhost/base_geomatique/api/reseau.php?ordre=' + ord, function(result) {
         points.clearLayers();
         L.geoJSON(result, {
             pointToLayer: function (feature, latlng) {

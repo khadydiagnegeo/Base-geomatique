@@ -291,7 +291,7 @@ de la population totale
                 }
             }
     
-            fetch('http://localhost/Base_Géomatique_SI/api/api_sociodemographique.php')
+            fetch('http://localhost/base_geomatique/api/api_sociodemographique.php')
                 .then(response => response.json())
                 .then(data => {
                     L.geoJSON(data, {

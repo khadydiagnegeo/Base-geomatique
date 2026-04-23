@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La santé au SENEGAL</title>
+
+
+
+    <script src=leaflet/leaflet.js></script>
+    <link href="leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+
+    <script  type="text/javascript" src="leaflet/mesure/src/Leaflet.LinearMeasurement.js"></script>
+    <link rel="stylesheet" href="leaflet/mesure/src/Leaflet.LinearMeasurement.css">
+
+    <script type="text/javascript" src="leaflet/Layers/src/styledLayerControl.js"></script>
+    <link rel="stylesheet" href="leaflet/Layers/css/styledLayerControl.css">
+
+    <script src="js/jquery.js"></script>  
+    
+    <style>
+         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+         
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: #08691a;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .navbar img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .navbar-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr; 
+            gap: 20px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+    
+        .left-column {
+            background-color: #eaeaea;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-column h1 {
+            color: #056c1a;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .left-column p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .right-column {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-column h2 {
+            color: #1d3557;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .right-column .placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            background-color: #f1f1f1;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            color: #888;
+            font-style: italic;
+        }
+        .left-column label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+    color: #056c1a;
+}
+
+.left-column select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <img src="Leaflet/images/pharmacie.png" alt="Icône ou image descriptive">
+    <div class="navbar-title">Données sur les Infrastructuresanitaires au Sénégal</div>
+</div>
+
+<div class="main-content">
+    <div class="left-column">
+        <h1>Infrastructures sanitaires du Senegal</h1>
+        <p>
+            Cette interface vous permet de visualiser l'ensemble des infrastructures du senegal que se soient les hopitaux,les pharmacies
+            les postes de santé ainsi que les centre de sante.
+            Le nombre de structure de chaque localite vous est fourni ainsi que l'indice d'accessiblite avec les donnees de projection de la population
+            de 2024 
+        </p>
+        <p>
+            Nous vous offrons aussi la passiblite de trouver la structure la plus de vous
+        </p>
+        <p>
+            Vous pouvez consulter les differentes fonctionnalites du site.
+        </p>
+
+        <select onchange="api_select_structure(this.value)">
+            <option value="">Que voulez vous afficher?</option>
+            <option value="*">Toutes les infrastructures</option>
+            <option value="Hopital">Les hopitaux</option>
+            <option value="Clinique">Les cliniques</option>
+            <option value="Poste de santé">Les postes de sante</option>
+            <option value="Pharmacie">Les pharmacies</option>
+        </select>
+        <p>Cochez la case si vous voulez connaittre la structure la plus proche de vous</p>
+
+        <div class="sidebar-section">
+            <label>
+                <input type="checkbox" id="nearestStructureCheckbox">
+                Je veux connaittre la structure la plus proche de moi!!!
+            </label>
+        </div>
+
+        <p>Vous pouvez afficher n'importe quelle region du senegal</p>
+        <select onchange="api_region(this.value)">
+            <option value='*'> Selectionner tout </option>
+            <option value='Dakar'> Dakar</option>
+            <option value='Kaolack'>Kaolock</option>
+            <option value='Matam'>Matam</option>
+            <option value='Thiès'>Thiès</option>
+            <option value='Diourbel'>Diourbel</option>
+            <option value='Saint-Louis'>Saint-Louis</option>
+            <option value='Louga'>Louga</option>
+            <option value='Kaffrine'>Kaffrine</option>
+            <option value='Kolda'>Kolda</option>
+            <option value='Sedhiou'>Sedhiou</option>
+            <option value='Tambacounda'>Tambacounda</option>
+            <option value='Fatick'>Fatick</option>
+            <option value='Ziguinchor'>Ziguinchor</option>
+            <option value='Kédougou'>Kédougou</option>
+            </select>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        //initialisation de la carte
+        var map = L.map('map').setView([14, -14.78682], 7);
+
+        var g_satellite = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 23,
+        attributions: ['Powered by Esri', 'Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics'],
+        id: 'mapbox/light-v9',
+});
+	    var g_terrain  = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 23,
+        attributions: ['Powered by Esri','Source: Esri, FAO, NOAA'],
+        id: 'mapbox/light-v9'});
+        
+
+         g_satellite.addTo(map)
+
+
+        var sante = new L.featureGroup();
+        sante.addTo(map)
+
+        var region = new L.featureGroup();
+        region.addTo(map)    
+
+
+
+
+ function reg_couleur(region) {
+        switch (region) {
+            case 'Dakar': return '#FF0000'; 
+            case 'Kaolack': return '#00FF00';
+            case 'Matam': return '#0000FF';
+            case 'Diourbel':return '#32CD32';
+            case 'Fatick':return '#4682B4';
+            case 'Kédougou':return '#FFD700';
+            case 'Kolda':return '#FF6347';
+            case 'Louga':return '#FFA500';
+            case 'Thiès':return '#FF69B4';
+            case 'Saint-Louis':return '#8B4513';
+            case 'Tambacounda':return '#40E0D0';
+            case 'Sedhiou':return '#FF00FF';
+            case 'Ziguinchor':return '#4B0082';
+            case 'Kaffrine':return '#808000';
+        }
+    }
+
+    function style(feature) {
+        return {
+            fillColor: reg_couleur(feature.properties.nomreg),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    }
+
+
+   // Fonction pour calculer la distance entre deux points en m2
+   function calc_distance(lat1, lon1, lat2, lon2) {
+  const R = 6371000; 
+  const φ1 = lat1 * Math.PI / 180;
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return ( R * c); 
+} 
+
+// Fonction pour trouver la structure la plus proche
+
+function plus_proche_structure(lat, lon, geojsonData) {
+            let plus_proche_structure = null;
+            let minDistance = Infinity;
+
+            geojsonData.features.forEach(feature => {
+
+                    const featureLat = feature.geometry.coordinates[1];
+                    const featureLon = feature.geometry.coordinates[0];
+                    const distance = calc_distanceDistance(lat, lon, featureLat, featureLon);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        nearestStructure = feature;
+                    }
+            
+            });
+
+            return { nearestStructure, minDistance };
+        }
+    
+        const nearestCheckbox = document.getElementById('nearestStructureCheckbox');
+
+       let nearestMarker = null;
+
+        // Fonction pour afficher la structure la plus proche 
+        function showNearestStructure(lat, lon, geojsonData) {
+            const { nearestStructure, minDistance } = plus_proche_structure(lat, lon, geojsonData);
+
+            if (nearestStructure) {
+               
+                L.marker([nearestStructure.geometry.coordinates[1], nearestStructure.geometry.coordinates[0]], {
+                    icon: icons["Clinique"]
+                }).addTo(map)
+                  .bindPopup(`<b>La structure la plus proche de vous est : ${nearestStructure.properties.name}</b><br>Type: ${nearestStructure.properties.type}<br>A une distance de${minDistance} mètre de vous`)
+                  .openPopup();
+
+              
+               map.setView([nearestStructure.geometry.coordinates[1], nearestStructure.geometry.coordinates[0]], 15);
+            } else {
+                alert("Aucune clinique trouvée à proximité.");
+            }
+            
+        }
+
+
+
+        var icons = {
+"Clinique": L.icon({
+    iconUrl: 'Leaflet/images/clinique1.png',
+    iconSize: [30, 30],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+}),
+"Pharmacie": L.icon({
+    iconUrl: 'Leaflet/images/pharmacie2.jpg',
+    iconSize: [30, 30],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+}),
+"Hopital": L.icon({
+    iconUrl: 'Leaflet/images/hopital3.png',
+    iconSize: [30, 30],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+}),
+"Poste de santé": L.icon({
+    iconUrl: 'Leaflet/images/sante.png',
+    iconSize: [30, 30],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+})
+
+};
+
+        var sante = new L.featureGroup();
+        sante.addTo(map)
+
+
+        const initialView = {
+  center: [14.4974, -14.4524], 
+  zoom: 7                     
+};
+    
+//Fonction pour l'affichage des structures sanitaires
+        function api_sante(sante_s){
+
+$.ajax({
+    url:'http://localhost/base_geomatique/api/sante.php?region='+sante_s,
+    type:'GET' ,
+    contentType : 'application/json; charset= UTF-8',
+    'success':function(result) {
+        sante.clearLayers()
+
+
+        const geojsonData = result;
+
+    var monApi=L.geoJSON(result,{
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, { 
+                    icon: icons[feature.properties.type] || L.icon({
+                        iconUrl:'Leaflet/images/marker-icon.png',
+                        iconSize: [25, 25],
+                        iconAnchor: [16, 32],
+                        popupAnchor: [0, -32]
+                    })
+                });
+            }
+        }).addTo(sante).bindPopup(function (layer) {
+            var popupContent = '<table class="popup-table">';
+            popupContent += '<tr><td>Type </td><td>' + layer.feature.properties.type + '</td></tr>';
+            popupContent += '<tr><td>Nom </td><td>' + layer.feature.properties.name + '</td></tr>';
+            popupContent += '</table>';
+            return popupContent;
+        });
+
+       document.getElementById('nearestStructureCheckbox').addEventListener('change', function (event) {
+            if (event.target.checked) { 
+            if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+// Ajout d'un marqueur pour la position de l'util
+        L.marker([lat, lon], {
+        icon: L.icon({
+        iconUrl: 'Leaflet/images/localisation.png',
+        iconSize: [60, 60],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+})
+        }).addTo(map)
+          .bindPopup('Vous êtes ici')
+          .openPopup();
+        
+        showNearestStructure(lat, lon, geojsonData);
+      }, error => {
+        alert('Erreur de géolocalisation : ' + error.message);
+      });
+    } else {
+      alert('La géolocalisation n\'est pas supportée par votre navigateur.');
+    }
+  } else {
+   
+    map.setView(initialView.center, initialView.zoom); 
+    clearMarkersAndLayers();
+
+  
+  }
+});
+
+    }})}
+    function clearMarkersAndLayers() {
+  map.eachLayer(layer => {
+    if (!layer._url) { 
+      map.removeLayer(layer);
+    }})}
+
+//Fonction pour l'affichage des regions
+function api_region(region_p){
+$.ajax({
+    url:'http://localhost/base_geomatique/api/region.php?region='+region_p,
+    type:'GET' ,
+    contentType : 'application/json; charset= UTF-8',
+    'success':function(result) {
+        region.clearLayers()
+
+    var monApi=L.geoJSON(result,{ style: style })
+;
+monApi.addTo(region);
+region.addTo(map);
+map.fitBounds(monApi.getBounds())
+}
+});
+    api_sante(region_p)
+}
+api_region('*')
+
+
+//creation de la fonction qui nous permet d'afficher les structures selon le type
+var structure=L.featureGroup()
+structure.addTo(map)
+function api_select_structure(type_s) {
+    $.getJSON('api/select_structure.php?type=' + type_s, function(result) {
+        structure.clearLayers();
+        L.geoJSON(result, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng, { 
+                    icon: icons[feature.properties.type] || L.icon({
+                        iconUrl:'Leaflet/images/marker-icon.png',
+                        iconSize: [25, 25],
+                        iconAnchor: [16, 32],
+                        popupAnchor: [0, -32]
+                    })
+                });
+            }
+        }).addTo(structure).bindPopup(function (layer) {
+            var popupContent = `
+                <table class="popup-table">
+                    <tr><td>Nom </td><td>${layer.feature.properties.name}</td></tr>
+                    <tr><td>EST </td><td>${layer.feature.properties.type}</td></tr>
+                </table>`;
+            return popupContent;
+        });
+
+        map.fitBounds(structure.getBounds());
+    }).fail(function() {
+        alert("Attention, il y a des erreurs lors de la récupération des données.");
+    });
+}
+
+var style_default={
+"color":"red",
+"fillColor":"yellow",
+"opacity":"0.9",
+"fillOpacity":"0",
+"weight": 1,
+
+};
+var style_survol={
+"color":"pink",
+"fillColor":"blue",
+"opacity":"0.9",
+"fillOpacity":"0.4",
+"weight": 1,
+};
+
+//fonction pour l'affichage des communes avec les indices d'accessiblite
+var localite = new L.FeatureGroup();
+localite.addTo(map)
+
+
+$.ajax({
+    url:'http://localhost/base_geomatique/api/localite.php',
+    type:'GET' ,
+    contentType : 'application/json; charset= UTF-8',
+    'success':function(result) {
+    var monApi1=L.geoJSON(result,{
+    
+onEachFeature: function(feature,layer){
+
+var ipsNormvalue = parseFloat(feature.properties.indice_norm);
+
+var ipsNormText = isNaN(ipsNormvalue) ? feature.properties.indice_norm:ipsNormvalue.toFixed(2);
+layer.bindTooltip("Commune:"+ feature.properties.name_4 +"<br>Population_estime2024:"+ feature.properties.pop_2024
+ +"<br>Nombre de structure:"+ feature.properties.nb_structures+"<br> Indice accessiblite:"+ feature.properties.indice_norm);
+}});;
+monApi1.addTo(localite);
+}});
+localite.addTo(map).on("mouseover",function(e){
+e.layer.setStyle(style_survol)
+}).on("mouseout",function(e){
+e.layer.setStyle(style_default);
+});
+
+
+
+
+
+
+
+//api_sante('*')
+
+var baseMaps = [
+                { 
+                    groupName : "Google Base Maps",
+                    expanded : true,
+                    layers    : {
+                        "Satellite" :  g_satellite,
+                        "Terrain"   :  g_terrain
+                    }
+                }
+            ]
+
+
+var overlays = [
+                 {
+                    groupName : "Entite Administrative",
+                    expanded  : true,
+                    layers    : { 
+                        "Region" : region,
+                        "Localite" 	 : localite
+                    }	
+                 }, {
+                    groupName : "Sante",
+                    expanded  : true,
+                    layers    : { 
+                        "Structure de Sante"     : sante,
+                                
+                    }	
+                 }
+                ]
+var options = {
+                container_width 	: "300px",
+                container_maxHeight : "350px", 
+                group_maxHeight     : "80px",
+                exclusive       	: false
+};
+var control = L.Control.styledLayerControl(baseMaps, overlays,options);
+map.addControl(control);
+
+
+
+</script>
+
+</body>
+</html>
