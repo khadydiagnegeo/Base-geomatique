@@ -14,67 +14,56 @@
         flex-grow: 1;
     }
 
-    * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             background: url(Leaflet/images/RGPH5.jpg) no-repeat center center/cover;
             color: #333;
-        }
-
+        } 
+/* 
      /* Section principale */
      .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.5);
-        }
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.5);
+    }
 
+    .hero h1 {
+        font-size: 3em;
+        margin-bottom: 0.5em;
+    }
+
+    .hero p {
+        font-size: 1.2em;
+        max-width: 800px;
+    }
+
+    @media (max-width: 768px) {
         .hero h1 {
-            font-size: 3em;
-            margin-bottom: 0.5em;
+            font-size: 2em;
         }
 
         .hero p {
-            font-size: 1.2em;
-            max-width: 800px;
+            font-size: 1em;
         }
+    }
 
-       
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2em;
-            }
 
-            .hero p {
-                font-size: 1em;
-            }
-        }
         .footer{
-            background-color: rgb(244, 244, 246);
-            text-align: center;
-            padding: 4px;
-            columns: rgb(36, 29, 245);
-            box-shadow: 0 --2px 4px rgba(0, 0, 0.1);
-            font-size: 1.1em;
+        background-color: rgb(244, 244, 246);
+        text-align: center;
+        padding: 4px;
+        columns: rgb(36, 29, 245);
+        box-shadow: 0 --2px 4px rgba(0, 0, 0.1);
+        font-size: 1.1em;
 
-        }
+    }
 
-        
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    padding: 20px;
-}
 
 
 .navbar {
@@ -87,15 +76,16 @@ body {
     z-index: 1000;
 }
 
+
 .navbar-brand {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
 }
 
-.navbar-brand img {
+/* .navbar-brand img {
     height: 20px;
     margin-right: 10px;
-}
+} */
 
 .navbar-menu {
     list-style: none;
@@ -152,78 +142,6 @@ body {
 }
 
 
-#map {
-    height: 500px;
-}
-
-
-.search-container {
-    position: relative;
-    display: inline-block;
-}
-
-.search-icon {
-    font-size: 24px;
-    cursor: pointer;
-}
-
-.search-list {
-    display: none;
-    position: absolute;
-    top: 30px;
-    left: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    width: 200px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.search-list li {
-    padding: 10px;
-    list-style: none;
-    cursor: pointer;
-}
-
-.search-list li:hover {
-    background-color: #f1f1f1;
-}
-
-.search-container:hover .search-list {
-    display: block;
-}
-
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 60px;
-    height: 100%;
-    background-color: #deeaf5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
-}
-
-.sidebar a {
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    margin: 15px 0;
-    font-size: 20px;
-}
-
-.sidebar a:hover {
-    color: #00aaff;
-}
-
-.sidebar i {
-    margin-bottom: 5px;
-}
 
 
 .menu-toggle {
@@ -241,36 +159,7 @@ body {
 }
 
 
-.content {
-    margin-left: 80px;
-    padding: 20px;
-}
-
-
-.map-dropdown {
-    position: fixed;
-    bottom: 60px;
-    left: 20px;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    display: none;
-    z-index: 1100;
-    padding: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    width: 150px;
-}
-
-.map-dropdown a {
-    display: block;
-    color: #004080;
-    text-decoration: none;
-    margin: 5px 0;
-}
-
-.map-dropdown a:hover {
-    background-color: #f0f0f0;
-}  
+  
 </style>
 </head>
 <body>
