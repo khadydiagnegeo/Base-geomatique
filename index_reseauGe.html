@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="leaflet/leaflet.css">
+	<link rel="stylesheet" href="leaflet/layercontrol/css/styledLayerControl.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="leaflet/Layers/css/styledLayerControl.css">
+
+
+
+    <script src="leaflet/leaflet.js"></script>
+    <script src="leaflet/Layers/src/styledLayerControl.js"></script>
+	<script src="leaflet/layercontrol/src/styledLayerControl.js"></script>
+    <script src="js/jquery.js"></script>
+
+
+
+	<style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            display: inline-block;
+        }
+
+    
+        .search-icon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .search-list {
+            display: none;
+            position: absolute;
+            top: 30px; 
+            left: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            max-height: 200px; 
+            overflow-y: auto;  
+        }
+
+        .search-list li {
+            padding: 10px;
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .search-list li:hover {
+            background-color: #f1f1f1;
+        }
+
+        
+        .search-container:hover .search-list {
+            display: block;
+        }
+        #map {
+        width: 100%;
+        height: 500px;
+        margin: 10px;
+    }
+
+
+    </style>
+
+
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<button class="map-toggle" onclick="toggleMapDropdown()">Changer le fond de carte</button>
+
+<div class="map-dropdown" id="mapDropdown">
+    <a href="#" onclick="changeBaseMap('osm')">Carte OpenStreetMap</a>
+    <a href="#" onclick="changeBaseMap('satellite')">Carte Satellite</a>
+    <a href="#" onclick="changeBaseMap('terrain')">Carte Terrain</a>
+</div>
+
+
+
+<div class="sidebar">
+    <a href="#catalogue" title="Catalogue"><i class="fas fa-book"></i> Catalogue</a>
+    <a href="#imprimer" title="Imprimer"><i class="fas fa-print"></i> Imprimer</a>
+    <a href="#partager" title="Partager"><i class="fas fa-share-alt"></i> Partager</a>
+    <a href="#itineraire" title="Itinéraire"><i class="fas fa-route"></i> Itinéraire</a>
+    <a href="#aide" title="Aide"><i class="fas fa-question-circle"></i> Aide</a>
+    <a href="#cartes" title="Cartes Prédéfinies"><i class="fas fa-map"></i> Cartes Prédéfinies</a>
+</div>
+
+	  <nav class="navbar">
+		<div class="navbar-brand"><img src="leaflet/images/drapeau.png" alt="Drapeau du Sénégal">
+			Réseau géodesique du Sénégal</div>
+		<ul class="navbar-menu" id="navbar-menu">
+		  <li><a href="#home">Recherche</a>
+            <ul>
+                <li><a href="/">RSS04 1er ordre</a></li>
+                <li><a href="/">RSS04 2eme ordre</a></li>
+                <li><a href="/">Points disparus</a></li>
+                <li><a href="/">Stations Permanentes</a></li>
+            </ul>
+          </li>
+		  <li><a href="#about">Signaler une borne disparue</a></li>
+		  <li><a href="#services">Guides et informations</a></li>
+		  <li><a href="#contact">Nous joindre</a></li>
+		</ul>
+	  </nav>
+
+      
+
+    <script>
+        document.querySelectorAll('.search-list li').forEach(item => {
+            item.addEventListener('click', () => {
+                const pointNumber = item.getAttribute('data-point');
+                alert('Vous avez sélectionné le point ' + pointNumber);
+            });
+        });
+    </script>
+
+	  <div id="map" class="map-container"></div>
+	  <script>
+
+		// Initialisation de la carte
+	var map = L.map('map').setView([14, -14.78682], 7);
+    var layers = {
+        osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }),
+        satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}', {
+            maxZoom: 18,
+            attribution: '© Esri & the GIS User Community'
+        }),
+        terrain: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{x}/{y}', {
+            maxZoom: 18,
+            attribution: '© Esri & the GIS User Community'
+        })
+    };
+
+    //couche OSM 
+    layers.osm.addTo(map);
+
+    e
+    function changeBaseMap(layer) {
+        map.eachLayer(function (layer) {
+            map.removeLayer(layer);
+        });
+        layers[layer].addTo(map);
+        toggleMapDropdown(); 
+    }
+
+    
+    function toggleMapDropdown() {
+        var dropdown = document.getElementById('mapDropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+
+    
+    document.addEventListener('click', function(event) {
+        var dropdown = document.getElementById('mapDropdown');
+        var toggleButton = document.querySelector('.map-toggle');
+        if (!dropdown.contains(event.target) && !toggleButton.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+ 
+    function toggleSidebar() {
+        document.body.classList.toggle('sidebar-open');
+    }
+	</script>
+
+<script>
+	
+
+var options = {
+		container_width 	: "300px",
+		container_maxHeight : "350px", 
+		group_maxHeight     : "80px",
+		exclusive       	: false
+	};
+
+//style d'affichage
+
+var style={
+    "color":"red",
+    "fillColor":"yellow",
+    "opacity":"0.9",
+    "fillOpacity":"0.1",
+    "weight": 1,
+
+};
+
+
+var style_survol={
+    "color":"pink",
+    "fillColor":"blue",
+    "opacity":"0.9",
+    "fillOpacity":"0.3",
+    "weight": 1,
+};
+
+//var chef=new L.FeatureGroup();
+//chef.addTo(map)
+
+/*$.ajax({
+                url:'api/sen_adm4.php', 
+                type: 'GET',
+                "content-type": "application/json",
+                "cache-control": "no-cache",
+                success: function (result) {
+                L.geoJSON(result).addTo(loc).bindTooltip(function (layer, lat)
+                {
+                return "Point geodesique :"+layer.feature.properties.nom_crca;
+                }
+                ).bindPopup(function (layer,lat)
+				{
+				return  "Localite de:"+layer.feature.properties.nom_crca;
+				});
+                },
+                error: function (data) {
+                    alert("Attention il y'a des erreurs");
+                }
+            });
+*/
+
+
+function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.nomreg),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+        var regionStyles = {
+            "Dakar": createRegionStyle("blue"),
+            "Louga": createRegionStyle("lime"),
+            "Matam": createRegionStyle("black"),
+            "Fatick": createRegionStyle("red"),
+            "Diourbel": createRegionStyle("orange"),
+            "Kaolack": createRegionStyle("yellow"),
+            "Kolda": createRegionStyle("purple"),
+            "Kédougou": createRegionStyle("brown"),
+            "Saint-Louis": createRegionStyle("pink"),
+            "Sedhiou": createRegionStyle("cyan"),
+            "Tambacounda": createRegionStyle("magenta", 0.4, 2, 0.2),
+            "Thiès": createRegionStyle("teal"),
+            "Ziguinchor": createRegionStyle("violet"),
+            "Kaffrine": createRegionStyle("green")
+        };
+
+function style(feature){
+    return{
+        fillColor:getColoor(feature.properties.nomreg),
+        weight:2,
+        opacity:1,
+        color:'white',
+        fillOpacity:0.7
+    }
+}
+
+function createRegionStyle(color, opacity, weight, fillOpacity) {
+            return {
+                color: color,
+                opacity: opacity || 0.7,
+                weight: weight || 2,
+                fillOpacity: fillOpacity || 0.07
+            };
+        };
+var region = new L.FeatureGroup();
+region.addTo(map)
+
+
+
+function afficherRegion(regionName) {
+        $.getJSON('api/sen_adm4.php?region=' + regionName, function(result) {
+            region.clearLayers(); 
+            L.geoJSON(result, {
+                style: function (feature) {
+                    return regionStyles[feature.properties.nomreg] || createRegionStyle("grey", 0.5, 1, 0.5); 
+                }
+            }).addTo(region).bindTooltip("Région").bindPopup(function (layer) {
+                var popupContent = `
+                    <table class="popup-table">
+                        <tr><td>Région numéro </td><td>${layer.feature.properties.gid}</td></tr>
+                        <tr><td>Région de </td><td>${layer.feature.properties.nomreg}</td></tr>
+                    </table>`;
+                return popupContent;
+            });
+    
+            map.fitBounds(region.getBounds());
+            //afficherPoints(regionName);
+            //afficherCommune(regionName);
+    
+        }).fail(function() {
+            alert("Attention, il y a des erreurs lors de la récupération des données.");
+        });
+    }
+
+
+
+
+
+
+//var point=new L.FeatureGroup();
+//point.addTo(map)
+
+var points=new L.FeatureGroup();
+points.addTo(map)
+
+function createIcon(iconUrl) {
+    return L.icon({
+        iconUrl: iconUrl,
+        iconSize: [25, 25],
+        iconAnchor: [12, 25],
+        popupAnchor: [0, -25]
+    });
+}
+
+var icons = {
+    "2": createIcon('icon/icon/ordre2.png'),
+    "1": createIcon('icon/icon/ordre1.png')
+};
+
+
+
+
+
+function afficherPoints(ord) {
+    $.getJSON('http://localhost/Base_Géomatique_SI/api/reseau.php?ordre=' + ord, function(result) {
+        points.clearLayers();
+        L.geoJSON(result, {
+            pointToLayer: function (feature, latlng) {
+                var icon = icons[feature.properties.ordre] || L.icon.defaultIcon;
+                return L.marker(latlng, { icon: icon });
+            }
+        }).addTo(points).bindTooltip("points_geodesique").bindPopup(function (layer) {
+        console.log(layer.feature.properties); // Afficher les propriétés de chaque point
+        var popupContent = `
+            <table class="popup-table">
+                <tr><td>Région numéro </td><td>${layer.feature.properties.gid}</td></tr>
+                <tr><td>NOM </td><td>${layer.feature.properties.nom}</td></tr>
+                <tr><td>X </td><td>${layer.feature.properties.x_coord}</td></tr>
+                <tr><td>Y </td><td>${layer.feature.properties.y_coord}</td></tr>
+                <tr><td>Ordre </td><td>${layer.feature.properties.ordre}</td></tr>
+            </table>`;
+        return popupContent;
+    });
+
+
+
+        map.fitBounds(points.getBounds());
+    }).fail(function() {
+        alert("Attention, il y a des erreurs lors de la récupération des données.");
+    });
+}
+//afficherpoint('*')
+
+
+
+
+
+/*function api_region(region_p){
+    $.ajax({
+        url:'http://localhost/CarteDynamique/api/sen_adm4.php?region='+region_p,
+        type:'GET' ,
+        contentType : 'application/json; charset= UTF-8',
+        'success':function(result) {
+            region.clearLayers()
+
+        var monApi=L.geoJSON(result,{ style: style })
+;
+console.log(monApi);
+
+monApi.addTo(region);
+map.fitBounds(monApi.getBounds())
+}
+        });
+
+    }
+
+    api_region('*')*/
+
+</script>
+
+<select onchange="afficherRegion(this.value)">
+    <option value='*'> Selectionner tout </option>
+    <option value='Dakar'> Dakar</option>
+    <option value='Kaolack'>Kaolock</option>
+    <option value='Matam'>Matam</option>
+    <option value='Thiès'>Thiès</option>
+    <option value='Diourbel'>Diourbel</option>
+    <option value='Saint-Louis'>Saint-Louis</option>
+    <option value='Louga'>Louga</option>
+    <option value='Kaffrine'>Kaffrine</option>
+    <option value='Kolda'>Kolda</option>
+    <option value='Sedhiou'>Sedhiou</option>
+    <option value='Tambacounda'>Tambacounda</option>
+    <option value='Fatick'>Fatick</option>
+    <option value='Ziguinchor'>Ziguinchor</option>
+    <option value='Kédougou'>Kédougou</option>
+
+    <script>
+/*
+ 
+    function afficherRegion(regionName) {
+        $.getJSON('api/sen_adm.php?region=' + regionName, function(result) {
+            region.clearLayers(); // Effacer les anciennes couches
+            L.geoJSON(result, {
+                style: function (feature) {
+                    return regionStyles[feature.properties.nomreg] || createRegionStyle("grey", 0.5, 1, 0.5); // Style par défaut si non défini
+                }
+            }).addTo(region).bindTooltip("Région").bindPopup(function (layer) {
+                var popupContent = `
+                    <table class="popup-table">
+                        <tr><td>Région numéro </td><td>${layer.feature.properties.gid}</td></tr>
+                        <tr><td>Région de </td><td>${layer.feature.properties.nomreg}</td></tr>
+                    </table>`;
+                return popupContent;
+            });
+    
+            map.fitBounds(region.getBounds());
+            afficherPoints(regionName); // Afficher les points de santé pour la région sélectionnée
+            afficherCommune(regionName);
+    
+        }).fail(function() {
+            alert("Attention, il y a des erreurs lors de la récupération des données.");
+        });
+    }*/
+afficherRegion("*");
+afficherPoints("*");
+
+
+
+</script>
+
+
+    
+</body>
+</html>

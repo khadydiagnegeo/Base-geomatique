@@ -1,14 +1,16 @@
+/* RESET */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    padding: 20px;
 }
 
-/* Style pour la barre de navigation */
+/* ================= NAVBAR ================= */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1d3557;
+    background-color: #1a6de1;
     color: white;
     padding: 10px 20px;
     z-index: 1000;
@@ -17,6 +19,11 @@ body {
 .navbar-brand {
     font-size: 24px;
     font-weight: bold;
+}
+
+.navbar-brand img {
+    height: 20px;
+    margin-right: 10px;
 }
 
 .navbar-menu {
@@ -31,17 +38,24 @@ body {
     position: relative;
 }
 
+.navbar-menu > li {
+    margin-left: 20px;
+}
+
 .navbar-menu a {
     color: white;
     text-decoration: none;
     font-size: 16px;
+    padding: 8px 12px;
+    display: block;
 }
 
 .navbar-menu a:hover {
-    color: #a8dadc;
+    background-color: #1a6de1;
+    border-radius: 4px;
 }
 
-/* Sous-menu (caché par défaut) */
+/* Sous-menu */
 .navbar-menu li ul {
     list-style: none;
     position: absolute;
@@ -60,19 +74,130 @@ body {
 }
 
 .navbar-menu li ul li a {
-    color: white;
-    text-decoration: none;
     font-size: 14px;
 }
 
-/* Afficher le sous-menu au survol */
 .navbar-menu li:hover ul {
     display: block;
 }
 
-.navbar-menu li ul li a:hover {
-    color: #f1faee;
+/* ================= MAP ================= */
+#map {
+    height: 500px;
 }
-.navbar-menu li:hover ul {
+
+/* ================= SEARCH ================= */
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+.search-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.search-list {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    width: 200px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.search-list li {
+    padding: 10px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.search-list li:hover {
+    background-color: #f1f1f1;
+}
+
+.search-container:hover .search-list {
     display: block;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+    background-color: #deeaf5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    margin: 15px 0;
+    font-size: 20px;
+}
+
+.sidebar a:hover {
+    color: #00aaff;
+}
+
+.sidebar i {
+    margin-bottom: 5px;
+}
+
+/* ================= MENU TOGGLE ================= */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #004080;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    z-index: 1100;
+    font-size: 20px;
+    border-radius: 5px;
+}
+
+/* ================= CONTENT ================= */
+.content {
+    margin-left: 80px;
+    padding: 20px;
+}
+
+/* ================= MAP DROPDOWN ================= */
+.map-dropdown {
+    position: fixed;
+    bottom: 60px;
+    left: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    display: none;
+    z-index: 1100;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    width: 150px;
+}
+
+.map-dropdown a {
+    display: block;
+    color: #004080;
+    text-decoration: none;
+    margin: 5px 0;
+}
+
+.map-dropdown a:hover {
+    background-color: #f0f0f0;
 }

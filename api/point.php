@@ -3,7 +3,7 @@ error_reporting(0);
 
 header("Access-Control-Allow-Origin: *");//this allows coors
 # Connection à la base de données
-include_once('configur.php');
+include_once('config.php');
 
 #Requete pour sélectionner les entités cartographiques et les données attributaires
 $ordre=$_GET['ordre'];

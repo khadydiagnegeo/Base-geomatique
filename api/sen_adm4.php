@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 # Connection à la base de données
-include_once('configur.php');
+include_once('config.php');
 
 #Requete pour sélectionner les entités cartographiques et les données attributaires
 $region = $_GET["region"];
