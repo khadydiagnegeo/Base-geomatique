@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualités Géomatique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .header {
+            background: url('votre_image_de_fond.jpg') no-repeat center center/cover;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 2.5em;
+        }
+
+        .section-three {
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-three .card {
+            width: 30%;
+            text-align: center;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .section-three .card:hover {
+            transform: scale(1.05);
+        }
+
+        .section-three img {
+            width: 100%;
+            height: auto;
+        }
+
+        .section-three .card-text {
+            padding: 15px;
+        }
+
+        .section-four {
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-four .card {
+            position: relative;
+            width: 22%;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .section-four .card:hover {
+            transform: scale(1.05);
+        }
+
+        .section-four img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .section-four .overlay {
+            position: absolute;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+
+
+        @media (max-width: 768px) {
+            .section-three .card,
+            .section-four .card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <section class="header">
+        <h1>Actualités Géomatique</h1>
+    </section>
+
+    <!-- Section des trois images avec texte -->
+    <section class="section-three">
+        <div class="card">
+            <img src="Leaflet/images/RS-USSEIN-GEOMATIQUE.webp" alt="Actualité 1">
+            <div class="card-text">
+                <h3>Master geomatique</h3>
+                <p>L'USSEIN vous propose un master en geomatique.</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="Leaflet/images/geomatique3.jpg" alt="Actualité 2">
+            <div class="card-text">
+                <h3>Resultats concours</h3>
+                <p>Resultat Concours geomatique Sciences de l'ingenieur,UIDT</p>
+            </div>
+        </div>
+        <div class="card">
+            <img src="Leaflet/images/geomatique2.jpg" alt="Actualité 3">
+            <div class="card-text">
+                <h3>Journee nationale de la geomatique</h3>
+                <p>Vous etes convie a la journee nationale du geospatiale.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section des quatre images cliquables avec texte -->
+    <section class="section-four">
+        <div class="card">
+            <img src="Leaflet/images/cartographie.png" alt="Carte 1">
+            <div class="overlay">Carte 1</div>
+        </div>
+        <div class="card">
+            <img src="Leaflet/images/photogrammetrie.jpeg" alt="Carte 2">
+            <div class="overlay">Carte 2</div>
+        </div>
+        <div class="card">
+            <img src="Leaflet/images/topo.jpeg" alt="Carte 3">
+            <div class="overlay">Carte 3</div>
+        </div>
+        <div class="card">
+            <img src="Leaflet/images/sig.jpeg" alt="Carte 4">
+            <div class="overlay">Carte 4</div>
+        </div>
+    </section>
+</body>
+</html>

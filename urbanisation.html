@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>resultats-RGPH-5</title>
+
+    <link href="leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="leaflet/mesure/src/Leaflet.LinearMeasurement.css">
+    <link rel="stylesheet" href="leaflet/Layers/css/styledLayerControl.css">
+
+
+    <script src=leaflet/leaflet.js></script>
+    <script  type="text/javascript" src="leaflet/mesure/src/Leaflet.LinearMeasurement.js"></script>
+    <script type="text/javascript" src="leaflet/Layers/src/styledLayerControl.js"></script>
+    <script src="jquery.js"></script>  
+
+    
+    <style>
+        /* Style général */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: #1d3557;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .navbar img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .navbar-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Conteneur principal */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* Deux colonnes : 1/3 pour le texte, 2/3 pour le reste */
+            gap: 20px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* Colonne gauche (Description) */
+        .left-column {
+            background-color: #eaeaea;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-column h1 {
+            color: #1d3557;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .left-column p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Colonne droite (Carte ou autres résultats) */
+        .right-column {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-column h2 {
+            color: #1d3557;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .right-column .placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            background-color: #f1f1f1;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            color: #888;
+            font-style: italic;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .legend {
+            background: white;
+            padding: 10px;
+            line-height: 1.5;
+            font-size: 14px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .legend i {
+            width: 20px;
+            height: 20px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.8;
+        }
+
+        
+
+        .tab-menu {
+            display: flex;
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .tab-menu button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background-color: #f1f1f1;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tab-menu button.active {
+            background-color: #1d3557;
+            color: white;
+        }
+
+        .tab-content {
+            margin-top: 20px;
+        }
+
+        .tab-content .tab {
+            display: none;
+        }
+
+        .tab-content .tab.active {
+            display: block;
+        }
+
+        /* Images */
+        .tab img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tableau */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #1d3557;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+    <img src="Leaflet/images/ANSD.jpg" alt="Icône ou image descriptive">
+    <div class="navbar-title">L'urbanisation au Sénégal</div>
+</div>
+
+<!-- Conteneur principal -->
+<div class="main-content">
+    <!-- Colonne gauche -->
+    <div class="left-column">
+        <h1>L'urbanisation au Senegal</h1>
+        <p>
+            Au Sénégal, le taux d’urbanisation ne cesse de croître au fil des années. En effet, il est passé 
+de 34,0% en 1976 à 39,0% en 1988, puis 40,7% en 2002 et 45,2% en 2013. Aujourd’hui, le 
+taux s’élève à 54,7% et quelle que soit la région, la même tendance s’observe au cours des 
+années. 
+        </p>
+        <p>
+            En ce qui concerne la région de Dakar, elle a toujours été fortement urbanisée (96,3% en 
+1976, 96,5% en 1988, 97,2% en 2002, 96,4% en 2013) et devient aujourd’hui la seule région 
+totalement urbanisée (100,0%). La région de Diourbel, suit celle de Dakar et devient la 
+deuxième région la plus urbanisée (66,9%). Elle passe de 21,0% en 1976 à 21,5% en 1988, 
+puis de 15,9% en 2002 à 16,1% en 2013.
+        </p>
+        <p>
+            Vous pouvez consulter les statistiques détaillées et explorer les graphiques qui sont disponibles sur la page
+            et analyser des cartes interactives à droite de cette page.
+        </p>
+    </div>
+
+   <!-- Colonne droite -->
+   <div class="right-column">
+    <!-- Menu d'onglets -->
+    <div class="tab-menu">
+        <button class="tab-button active" data-target="map">Carte</button>
+        <button class="tab-button" data-target="chart">Graphique</button>
+        <button class="tab-button" data-target="table">Tableau</button>
+    </div>
+
+    <div class="tab-content">
+         
+        <div id="map" class="tab active"></div>
+        <script>
+            const map = L.map('map').setView([14.4974, -14.4524], 7);
+    
+           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+    
+           //Fonction pour déterminer les couleurs selon la densité
+            function getColor(d) {
+                return d > 1000 ? '#800026' :
+                       d > 450  ? '#E31A1C' :
+                       d > 260  ? '#FC4E2A' :
+                       d > 130  ? '#FD8D3C' :
+                       d > 75  ? '#FEB24C' :
+                       d > 30   ? '#FED976' :
+                                  '#FFEDA0';
+            }
+    
+            // Style des polygones
+            function style(feature) {
+                return {
+                    fillColor: getColor(feature.properties.densité_k),
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                };
+            }
+    
+            // Ajouter la légende
+            const legend = L.control({position: 'topright'});
+    
+            legend.onAdd = function () {
+                const div = L.DomUtil.create('div', 'legend'),
+                    grades = [0, 30, 75, 130, 260, 450, 1000],
+                    labels = [];
+    
+                div.innerHTML = '<b>Densité (hab/km²)</b><br>';
+                for (let i = 0; i < grades.length; i++) {
+                    div.innerHTML +=
+                        '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                }
+                return div;
+            };
+    
+            legend.addTo(map);
+    
+            // Ajouter les interactions avec les régions
+            function onEachFeature(feature, layer) {
+                if (feature.properties) {
+                    layer.bindTooltip(
+                        `<strong>${feature.properties.nomreg}</strong><br>
+                        Densité : ${feature.properties.densité_k} hab/km²<br>
+                        Année : 2023`
+                    );
+                }
+            }
+    
+            // Charger les données GeoJSON
+            fetch('http://localhost/web_demographique/api/api_sociodemographique.php')
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        style: style,
+                        onEachFeature: onEachFeature
+                    }).addTo(map);
+                })
+                .catch(error => console.error('Erreur lors du chargement des données :', error));
+        </script>
+       
+
+        <div id="chart" class="tab">
+            <img src="Leaflet/images/urbanisation.JPG" alt="evolution du taux d'urbanisation">
+        </div>
+        <div id="table" class="tab">
+            <table>
+                <thead>
+                      <tr>
+                        <th>Région</th>
+                        <th>Urbain(%)</th>
+                        <th>Rural(%)</th>
+                        <th>Taux d'urbanisation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dakar</td>
+                        <td>40,4</td>
+                        <td>0</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>Ziguinchor</td>
+                        <td>3,4</td>
+                        <td>3,4</td>
+                        <td>54,9</td>
+                    </tr>
+                    <tr>
+                        <td>Diourbel</td>
+                        <td>14,00</td>
+                        <td>8,4</td>
+                        <td>66,9</td>
+                    </tr>
+                    <tr>
+                        <td>Saint-Louis</td>
+                        <td>5,7</td>
+                        <td>7,8</td>
+                        <td>46,8</td>
+                    </tr>
+                    <tr>
+                        <td>Tambacounda</td>
+                        <td>2,6</td>
+                        <td>8,9</td>
+                        <td>26,4</td>
+                    </tr>
+                    <tr>
+                        <td>Kaolack</td>
+                        <td>5,1</td>
+                        <td>10,1</td>
+                        <td>38,2</td>
+                    </tr>
+                    <tr>
+                        <td>Thies</td>
+                        <td>14,3</td>
+                        <td>12,8</td>
+                        <td>57,5</td>
+                    </tr>
+                    <tr>
+                        <td>Louga</td>
+                        <td>3,1</td>
+                        <td>10,00</td>
+                        <td>27.00</td>
+                    </tr>
+                     <tr>
+                        <td>Fatick</td>
+                        <td>2,1</td>
+                        <td>8,5</td>
+                        <td>22,8</td>
+                    </tr>
+                      <tr>
+                        <td>Kolda</td>
+                        <td>3,3</td>
+                        <td>7,1</td>
+                        <td>36,2</td>
+                    </tr>
+                      <tr>
+                        <td>Matam</td>
+                        <td>2,6</td>
+                        <td>6,9</td>
+                        <td>31,5</td>
+                    </tr>
+                      <tr>
+                        <td>Kaffrine</td>
+                        <td>1,3</td>
+                        <td>8,5</td>
+                        <td>15,3</td>
+                    </tr>
+                      <tr>
+                        <td>Fatick</td>
+                        <td>2,1</td>
+                        <td>8,5</td>
+                        <td>22,8</td>
+                    </tr>
+                      <tr>
+                        <td>Kedougou</td>
+                        <td>2,1</td>
+                        <td>2,1</td>
+                        <td>31,3</td>
+                    </tr>
+                      <tr>
+                        <td>Fatick</td>
+                        <td>2,1</td>
+                        <td>8,5</td>
+                        <td>22,8</td>
+                    </tr>
+                      <tr>
+                        <td>Sedhiou</td>
+                        <td>1,6</td>
+                        <td>5,3</td>
+                        <td>22,6</td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<script>
+    // Gestion des onglets
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabs = document.querySelectorAll('.tab');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            button.classList.add('active');
+            document.getElementById(button.dataset.target).classList.add('active');
+        });
+    });
+</script>
+
+
+
+
+</div>
+</div>
+</body>
+</html>

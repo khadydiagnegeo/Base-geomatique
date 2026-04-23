@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualités Géomatique</title>
+    <style>
+
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+
+        .header {
+            background: url(Leaflet/images/imageConf1.jpg) no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h1 {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 2.5em;
+        }
+
+
+        .section-three {
+            padding: 30px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-three .card {
+            width: 20%;
+            max-width: 200px;
+            text-align: center;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .section-three .card:hover {
+            transform: scale(1.05);
+        }
+
+        .section-three img {
+            width: 100%;
+            height: auto;
+        }
+
+        .section-three .card-text {
+            padding: 10px;
+        }
+
+
+        .section-title {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+
+        .section-four {
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-four .card {
+            position: relative;
+            width: 22%;
+            max-width: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .section-four .card:hover {
+            transform: scale(1.05);
+        }
+
+        .section-four img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .section-four .overlay {
+            position: absolute;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+
+      
+        @media (max-width: 768px) {
+            .section-three .card,
+            .section-four .card {
+                width: 100%;
+            }
+        }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a6de1;
+    color: white;
+    padding: 10px 20px;
+    z-index: 1000;
+}
+
+
+
+
+.navbar-brand {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-menu li {
+    position: relative;
+}
+
+.navbar-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.navbar-menu a:hover {
+    color: #a8dadc;
+}
+
+
+            
+
+.container{
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+ } 
+
+
+
+.container p{
+    margin-bottom: 10px;
+    padding-left: 5px;
+    padding-right: 10px;
+    text-align: start;
+
+}
+
+img{
+    width: 50%;
+    height: 60%;
+    object-fit: cover;
+    float: left;
+    padding-right: 10px;
+    shape-outside:margin-box ;
+}
+
+
+
+
+
+
+/* Sous-menu (caché par défaut) */
+.navbar-menu li ul {
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #457b9d;
+    margin: 0;
+    padding: 0;
+    display: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+}
+
+.navbar-menu li ul li {
+    padding: 10px 30px;
+}
+
+.navbar-menu li ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+
+.navbar-menu li:hover ul {
+    display: block;
+}
+
+.navbar-menu li ul li a:hover {
+    color: #f1faee;
+}
+.navbar-menu li:hover ul {
+    display: block;
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Base Géomatique UFR sciences de l'ingenieur</div>
+        <ul class="navbar-menu">
+            <li>
+                <a href="#">À propos</a>
+            
+        <ul>
+            <li><a href="#">L'UIDT</a></li>
+            <li><a href="essai.html">L'UFR SI</a></li>
+         </ul>
+            </li>
+            <li><a href="Formation.html">Formation</a></li>
+            <li>
+                <a href="#">Travaux réalisés par les étudiants géomaticiens</a>
+                <ul>
+                    <li><a href="http://localhost/RéseauGeodésique/index.html">Topographie</a></li>
+                    <li><a href="P1_integrateur.html">SIG</a></li>
+                    <li><a href="http://localhost/infrastructuresSanitaires/index.html">Santé</a></li>
+                    <li><a href="analyse_statistique.html">Analyse statistique</a></li>
+                </ul>
+            </li>
+            <li><a href="actualites.html">Organisation</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+<script>
+    var geoserver = new L.featureGroup();
+geoserver.addTo(map);
+
+var url_geo_serveur = "http://localhost:8080";
+
+var fond = L.tileLayer.wms(url_geo_serveur + "/geoserver/wms", {
+    layers: 'uidt_thies:surface2', 
+    format: 'image/png',
+    transparent: true,
+
+});
+fond.addTo(geoserver);
+
+</script>
+    <section class="header">
+        <h1>La Géomatique ? Qu'est ce que c'est</h1>
+        
+    </section>
+
+
+    <div class="container">
+                            
+<img loading="lazy" src="Leaflet/images/Geomatique_site.png" width="1080" height="345" alt="Géomatique" title="Géomatique" />
+<p>La géomatique, c'est la rencontre entre les <strong>sciences géographiques</strong> et <strong>l'informatique.</strong><br>
+Il s’agit d’un ensemble de technologies permettant de modéliser, de représenter et d’analyser 
+le territoire pour en faire des représentations virtuelles : géolocalisation, imagerie spatiale, bases de données, 
+SIG, technologies du Web…</p>
+
+
+            </div>
+    <section class="section-three">
+        <div class="card" data-url="actualite2.html">
+            <img src="Leaflet/images/soutenance.jpg" alt="Actualité 2">
+            <div class="card-text">
+                <h3>Soutenance Promo 2</h3>
+                <p>La deuxième promotion de Géomatique a tenu sa journée de soutenance le 8 février 2025 à l’amphithéâtre Professeur Meïssa Fall de l’UFR Sciences de l’Ingénieur de l’Université Iba Der Thiam de Thiès</p>
+            </div>
+        </div>
+        <div class="card" data-url="conference.html">
+            <img src="Leaflet/images/conference_gmt.jpg" alt="Actualité 1">
+            <div class="card-text">
+                <h3>Conférence</h3>
+                <p>Samedi 07 Decembre s'est tenue une Conférence sur le Theme "La géomatique pour un développement durable".</p>
+            </div>
+        </div>
+        <div class="card" data-url="gaindesat.html">
+            <img src="Leaflet/images/gaindesat.jpeg" alt="Actualité 3">
+            <div class="card-text">
+                <h3>GAINDESAT-1A</h3>
+                <p>Le tout premier satellite conçu et fabriqué par des ingénieurs sénégalais, GAINDESAT-1A, a été lancé avec succès le 16 août.</p>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        const cardsThree = document.querySelectorAll('.section-three .card');
+    
+        cardsThree.forEach(card => {
+            card.addEventListener('click', () => {
+                const url = card.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    </script>
+
+    <div class="section-title">
+        Les domaines de la géomatique
+    </div>
+    <section class="section-four">
+        <div class="card" data-url="Cartographie.html">
+            <img src="Leaflet/images/cartographie.png" alt="Carte 1">
+            <div class="overlay">SIG & Gestion Territoriale</div>
+        </div>
+        <div class="card" data-url="photogrammetrie.html">
+            <img src="Leaflet/images/photogrammetrie.jpeg" alt="Carte 2">
+            <div class="overlay">Photogrammétrie</div>
+        </div>
+        <div class="card" data-url="topographie.html">
+            <img src="Leaflet/images/topo.jpeg" alt="Carte 3">
+            <div class="overlay">Topographie</div>
+        </div>
+        <div class="card" data-url="teledetection.html">
+            <img src="Leaflet/images/teledetection.webp" alt="Carte 4">
+            <div class="overlay">Télédétection</div>
+        </div>
+    </section>
+    
+    <script>
+        const cards = document.querySelectorAll('.card');
+    
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const url = card.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web socio-demographique</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+    .main-content {
+        display: grid;
+        grid-template-columns: 1fr 2fr; 
+        gap: 20px;
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background: url(Leaflet/images/RGPH5.jpg) no-repeat center center/cover;
+            color: #333;
+        }
+
+     /* Section principale */
+     .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            max-width: 800px;
+        }
+
+       
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .hero p {
+                font-size: 1em;
+            }
+        }
+        .footer{
+            background-color: rgb(244, 244, 246);
+            text-align: center;
+            padding: 4px;
+            columns: rgb(36, 29, 245);
+            box-shadow: 0 --2px 4px rgba(0, 0, 0.1);
+            font-size: 1.1em;
+
+        }
+</style>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="navbar-brand">Données Socio-Démographiques</div>
+        <ul class="navbar-menu">
+            <li>
+                <a href="#">À propos</a>
+            
+        <ul>
+            <li><a href="sciences_ingenieur.html">UFR sciences de l'ingenieur</a></li>
+            <li><a href="essai.html">Geomatique</a></li>
+         </ul>
+            </li>
+            <li><a href="rapport-et-donnees.html">Rapport et données</a></li>
+            <li>
+                <a href="#">Résultats RGPH-5 2023</a>
+                <ul>
+                    <li><a href="densite_population.html">Densité de population</a></li>
+                    <li><a href="urbanisation.html">Urbanisation</a></li>
+                    <li><a href="population_urbaine.html">Population urbaine</a></li>
+                    <li><a href="population_residente.html">Population residente</a></li>
+                </ul>
+            </li>
+            <li><a href="actualites.html">Actualités</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Base de Données Socio-Démographique</h1>
+        <p>
+            Bienvenue sur notre plateforme interactive qui présente des données détaillées 
+            sur la population du Sénégal, y compris la densité, la répartition par sexe, 
+            et bien plus encore. Explorez nos cartes et graphiques pour découvrir des analyses approfondies.
+        </p>
+    </div>
+</section>
+<div class="footer">
+    khady.diagne3@univ-thies.sn
+</div>
+      
+
+
+
+
+    
+</body>
+</html>

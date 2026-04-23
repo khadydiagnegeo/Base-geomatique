@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projet SIG — Occupation du sol | UIDT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+:root {
+      --blue:        #1a6de1;
+      --blue-mid:    #378ADD;
+      --blue-light:  #E6F1FB;
+      --blue-dark:   #0C447C;
+      --teal:        #1D9E75;
+      --teal-light:  #E1F5EE;
+      --amber:       #EF9F27;
+      --amber-light: #FAEEDA;
+
+      --bg:          #F4F6F9;
+      --surface:     #FFFFFF;
+      --surface-alt: #F1EFE8;
+      --border:      rgba(0,0,0,0.10);
+      --border-mid:  rgba(0,0,0,0.18);
+      --text:        #1A1A1A;
+      --text-muted:  #6B6B6B;
+      --text-hint:   #9A9A9A;
+
+      --radius-md:   8px;
+      --radius-lg:   12px;
+      --radius-xl:   18px;
+    }
+
+  
+    body {
+      /* font-family: 'DM Sans', sans-serif; */
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 40px;
+      background: var(--blue);
+      border-bottom: 0.5px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      /* font-family: 'Syne', sans-serif; */
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--bg);
+    }
+
+    .nav-logo {
+      width: 30px;
+      height: 30px;
+      background: var(--blue);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      font-weight: 400;
+      padding: 7px 15px;
+      border-radius: 7px;
+      color: var(--bg);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-link:hover {
+      background: var(--bg);
+      color: var(--bg);
+    }
+
+    .nav-link.active {
+      background: var(--blue-light);
+      color: var(--blue);
+      font-weight: 500;
+    }
+
+  
+    .hero {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 40px;
+      padding: 72px 40px 64px;
+      background: var(--surface);
+      border-bottom: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+
+    /* .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    } */
+
+    .hero-accent {
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 360px;
+      height: 360px;
+      background: var(--blue-light);
+      border-radius: 50%;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 560px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 5px 13px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+
+    .hero-badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .hero h1 {
+      /* font-family: 'Syne', sans-serif; */
+      font-weight: 800;
+      font-size: 44px;
+      line-height: 1.08;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span { color: var(--blue); }
+
+    .hero-desc {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text);
+      margin-bottom: 34px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      /* font-family: 'DM Sans', sans-serif; */
+      font-size: 14px;
+      font-weight: 500;
+      padding: 11px 22px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover  { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-outline {
+      /* font-family: 'DM Sans', sans-serif; */
+      font-size: 14px;
+      font-weight: 400;
+      padding: 11px 22px;
+      background: transparent;
+      color: var(--text);
+      border: 0.5px solid var(--border-mid);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-outline:hover { background: var(--bg); }
+
+    .hero-stats {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .stat-card {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 22px;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .stat-number {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--blue);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text);
+      margin-top: 3px;
+      display: block;
+      line-height: 1.4;
+    }
+
+    .section {
+      padding: 52px 40px;
+    }
+
+    .section-label {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-hint);
+      margin-bottom: 6px;
+    }
+
+    .section-heading {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    .presentation { background: var(--bg); }
+
+    .pres-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .pres-card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 26px;
+    }
+
+    .pres-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.75;
+    }
+
+    .pres-card-title {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+   
+    .objectifs { background: var(--surface); }
+
+    .obj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .obj-card {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+
+    .obj-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    .obj-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .obj-icon.blue  { background: var(--blue-light); }
+    .obj-icon.teal  { background: var(--teal-light); }
+    .obj-icon.amber { background: var(--amber-light); }
+
+    .obj-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .etapes { background: var(--bg); }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2px;
+      background: var(--border);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .step {
+      background: var(--surface);
+      padding: 22px 18px;
+      cursor: pointer;
+      transition: background 0.12s;
+      border: none;
+      text-align: left;
+    }
+
+    .step:hover   { background: #F0F4FF; }
+    .step.active  { background: var(--blue-light); }
+
+    .step-num {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 30px;
+      font-weight: 800;
+      color: rgba(0,0,0,0.12);
+      line-height: 1;
+      margin-bottom: 12px;
+      transition: color 0.12s;
+    }
+
+    .step.active .step-num { color: var(--blue-mid); }
+
+    .step-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+      margin-bottom: 7px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+
+    .technologies { background: var(--surface); }
+
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 16px;
+      border: 0.5px solid var(--border-mid);
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 400;
+      transition: border-color 0.15s;
+    }
+
+    .chip:hover { border-color: var(--blue-mid); }
+
+    .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .cta-bar {
+      margin: 0 40px 40px;
+      background: var(--blue);
+      border-radius: var(--radius-xl);
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cta-bar h3 {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+
+    .cta-bar p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .btn-white {
+      /* font-family: 'DM Sans', sans-serif; */
+      font-size: 13px;
+      font-weight: 500;
+      padding: 11px 20px;
+      background: #fff;
+      color: var(--blue);
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.15s;
+    }
+
+    .btn-white:hover { opacity: 0.92; }
+
+
+    footer {
+      background: var(--surface);
+      border-top: 0.5px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer .foot-brand {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    footer p {
+      font-size: 12px;
+      color: var(--text-hint);
+    }
+
+  
+    .step-detail {
+      margin-top: 2px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      animation: slideDown 0.25s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-detail-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .step-detail-main {
+      padding: 32px 36px;
+      border-right: 0.5px solid var(--border);
+    }
+
+    .step-detail-aside {
+      padding: 32px 36px;
+      background: var(--bg);
+    }
+
+    .step-detail-num {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .step-detail-title {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .step-detail-body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+
+    .step-detail-aside-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-hint);
+      margin-bottom: 14px;
+    }
+
+    .step-detail-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .step-detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .step-detail-bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .map-gallery {
+      margin-top: 24px;
+      border-top: 0.5px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .map-gallery-label {
+      /* font-family: 'Syne', sans-serif; */
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-hint);
+      margin-bottom: 12px;
+    }
+
+    .map-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .map-tab {
+      /* font-family: 'DM Sans', sans-serif; */
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 0.5px solid var(--border-mid);
+      background: var(--bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .map-tab.active {
+      background: var(--blue-light);
+      color: var(--blue);
+      border-color: var(--blue-mid);
+    }
+
+    .map-frame {
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .map-frame img {
+      width: 100%;
+      display: block;
+      transition: opacity 0.2s;
+    }
+
+    .map-caption {
+      padding: 8px 14px;
+      font-size: 11px;
+      color: var(--text-hint);
+      border-top: 0.5px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .map-zoom-btn {
+      font-size: 11px;
+      color: var(--blue);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .map-zoom-btn:hover { text-decoration: underline; }
+
+    /* Fullscreen overlay */
+    .map-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .map-overlay.open { display: flex; }
+
+    .map-overlay img {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .map-overlay-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+
+    @media (max-width: 768px) {
+      .step-detail-inner { grid-template-columns: 1fr; }
+      .step-detail-main  { border-right: none; border-bottom: 0.5px solid var(--border); padding: 24px 20px; }
+      .step-detail-aside { padding: 24px 20px; }
+    }
+
+    @media (max-width: 768px) {
+      .navbar  { padding: 12px 20px; }
+      .hero    { flex-direction: column; padding: 48px 20px 40px; }
+      .hero h1 { font-size: 32px; }
+      .hero-stats { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .stat-card  { min-width: 100px; }
+      .section    { padding: 36px 20px; }
+      .pres-grid  { grid-template-columns: 1fr; }
+      .cta-bar    { margin: 0 20px 28px; padding: 22px 22px; }
+      footer      { padding: 20px; flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="3" fill="#fff"/>
+          <circle cx="8" cy="8" r="6.5" stroke="#fff" stroke-width="1"/>
+        </svg>
+      </div>
+      Base géomatique UFR sciences de l'ingénieur - Projet intégrateur Promo 2
+    </div>
+    <div class="nav-links">
+      <a href="#" class="nav-link active">Accueil</a>
+      <a href="#etapes" class="nav-link">Étapes</a>
+      <a href="occsol.html" class="nav-link">Carte</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-accent"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Université Iba Der Thiam de Thiès UFR science de l'ingenieur Géomatique
+      </div>
+      <h1>Système d'Information<br><span>Géographique</span></h1>
+      <p class="hero-desc">
+        Visualisation et analyse interactive de l'occupation du sol du campus —
+        données spatiales, gestion des infrastructures et aide à la décision.
+      </p>
+      <div class="hero-actions">
+        <a href="occsol.html" class="btn-primary">Accéder à la carte →</a>
+        <a href="#etapes" class="btn-outline">Voir les étapes</a>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-number">6</span>
+        <span class="stat-label">Étapes de réalisation</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">4+</span>
+        <span class="stat-label">Technologies</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">WMS</span>
+        <span class="stat-label">Services GeoServer</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Présentation ───────────────────────────────────── -->
+  <section class="section presentation">
+    <div class="section-label">À propos</div>
+    <div class="section-heading">Présentation du projet</div>
+    <div class="pres-grid">
+      <div class="pres-card">
+        <div class="pres-card-title">Contexte</div>
+        <p>
+          Ce projet consiste à développer une plateforme SIG permettant de visualiser,
+          analyser et interroger les données spatiales liées à l'occupation du sol
+          de l'Université Iba Der Thiam de Thiès.
+        </p>
+      </div>
+      <div class="pres-card">
+        <div class="pres-card-title">Objectif principal</div>
+        <p>
+          Faciliter la gestion des infrastructures, améliorer la prise de décision
+          et offrir un outil interactif accessible à tous les acteurs de l'université.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section objectifs">
+    <div class="section-label">Objectifs</div>
+    <div class="section-heading">Ce que ce SIG permet</div>
+    <div class="obj-grid">
+
+      <div class="obj-card">
+        <div class="obj-icon blue">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="2" y="2" width="5" height="5" rx="1" fill="#378ADD"/>
+            <rect x="9" y="2" width="5" height="5" rx="1" fill="#378ADD" opacity=".5"/>
+            <rect x="2" y="9" width="5" height="5" rx="1" fill="#378ADD" opacity=".5"/>
+            <rect x="9" y="9" width="5" height="5" rx="1" fill="#378ADD" opacity=".25"/>
+          </svg>
+        </div>
+        <div class="obj-title">Cartographier toutes les entités spatiales du campus</div>
+      </div>
+
+      <div class="obj-card">
+        <div class="obj-icon teal">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="5.5" stroke="#1D9E75" stroke-width="1.5"/>
+            <circle cx="8" cy="8" r="2" fill="#1D9E75"/>
+          </svg>
+        </div>
+        <div class="obj-title">Visualisation dynamique via carte interactive</div>
+      </div>
+
+      <div class="obj-card">
+        <div class="obj-icon blue">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 12L6 8L9 11L14 5" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="obj-title">Faciliter la gestion des données géographiques</div>
+      </div>
+
+      <div class="obj-card">
+        <div class="obj-icon amber">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2L10 6H14L11 9L12 13L8 11L4 13L5 9L2 6H6L8 2Z" fill="#EF9F27" opacity=".8"/>
+          </svg>
+        </div>
+        <div class="obj-title">Outil d'aide à la décision pour la gestion universitaire</div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="section etapes" id="etapes">
+    <div class="section-label">Méthodologie</div>
+    <div class="section-heading">Étapes de réalisation</div>
+
+    <div class="steps-grid">
+      <button class="step active" onclick="setStep(this, 0)">
+        <div class="step-num">01</div>
+        <div class="step-title">Polygonale de base - polygonale secondaire</div>
+        <div class="step-desc">calcul des sommets de la polygonale secondaire...</div>
+      </button>
+      <button class="step" onclick="setStep(this, 1)">
+        <div class="step-num">02</div>
+        <div class="step-title">Observation statique</div>
+        <div class="step-desc">Stationnemment sur une longue periode...</div>
+      </button>
+      <button class="step" onclick="setStep(this, 2)">
+        <div class="step-num">03</div>
+        <div class="step-title">Post-traitement</div>
+        <div class="step-desc">Traitement ligne de bases et ajustement...</div>
+      </button>
+      <button class="step" onclick="setStep(this, 3)">
+        <div class="step-num">04</div>
+        <div class="step-title">Levée de détails - Maillage</div>
+        <div class="step-desc">Levée du batis et des détails par GPS et station total</div>
+      </button>
+      <button class="step" onclick="setStep(this, 4)">
+        <div class="step-num">05</div>
+        <div class="step-title">Restitution cartographique</div>
+        <div class="step-desc">Carte Leaflet et connexion aux API.</div>
+      </button>
+      <button class="step" onclick="setStep(this, 5)">
+        <div class="step-num">06</div>
+        <div class="step-title">Développement web et visualisation dynamique</div>
+        <div class="step-desc">Affichage dynamique et interaction utilisateur.</div>
+      </button>
+    </div>
+
+    <div class="step-detail" id="step-detail">
+      <div class="step-detail-inner">
+        <div class="step-detail-main">
+          <div class="step-detail-num" id="detail-num"></div>
+          <div class="step-detail-title" id="detail-title"></div>
+          <div class="step-detail-body" id="detail-body"></div>
+        </div>
+        <div class="step-detail-aside">
+          <div class="step-detail-aside-label">Points clés</div>
+          <div class="step-detail-items" id="detail-items"></div>
+        </div>
+      </div>
+    </div>
+
+    <a href="occsol.html" class="btn-primary" style="margin-top: 28px; display: inline-block;">Accéder à la carte d'occupation du sol →</a>
+  </section>
+
+ 
+  <section class="section technologies">
+    <div class="section-label">Stack technique</div>
+    <div class="section-heading">Technologies utilisées</div>
+    <div class="tech-chips">
+      <div class="chip">
+        <div class="chip-dot" style="background:#1D9E75"></div>
+        Leaflet
+      </div>
+      <div class="chip">
+        <div class="chip-dot" style="background:#185FA5"></div>
+        GeoServer
+      </div>
+      <div class="chip">
+        <div class="chip-dot" style="background:#336791"></div>
+        PostgreSQL / PostGIS
+      </div>
+      <div class="chip">
+        <div class="chip-dot" style="background:#E34C26"></div>
+        HTML / CSS
+      </div>
+      <div class="chip">
+        <div class="chip-dot" style="background:#c7a800"></div>
+        JavaScript
+      </div>
+    </div>
+  </section>
+
+  
+  <div class="cta-bar">
+    <div>
+      <h3>Prêt à explorer le campus ?</h3>
+      <p>Accédez à la carte interactive d'occupation du sol</p>
+    </div>
+    <a href="occsol.html" class="btn-white">Ouvrir la carte →</a>
+  </div>
+
+  <div class="map-overlay" id="map-overlay" onclick="closeOverlay()">
+    <button class="map-overlay-close" onclick="closeOverlay()">&#x2715;</button>
+    <img id="overlay-img" src="" alt="Plan agrandi" onclick="event.stopPropagation()"/>
+  </div>
+
+ 
+  <footer>
+    <div class="foot-brand">UFR SI Géomatique Khady DIAGNE</div>
+    <p>Université Iba Der Thiam de Thiès UFR sciences de l'ingenieur Géomatique &mdash; Tous droits réservés</p>
+  </footer>
+
+  <script>
+    var stepsData = [
+      {
+        num: "Étape 01",
+        title: "Polygonale de base - polygonale secondaire",
+        body: "L'implantation du projet est réalisée par la matérialisation sur le terrain des sommets d'une polygonale secondaire au moyen de piquets de fer et croix gravées connues en coordonnées rectangulaires X, Y et Z. L’emplacement des points est choisi après reconnaissance du terrain afin des points pouvant assurer les levés par GNSS-RTK et des points se situant au sol et inter-visibles pour les levés avec la station totale.En planimétrie, le calcul des sommets de la polygonale secondaire se basera sur la polygonale principale du Campus VCN définie dans le réseau RRS04 qui s’appuie sur la projection UTM Zone 28 Nord. Les coordonnées planes seront déterminées par densification par GNSS en mode statique rapide et contrôlées par GNSS-RTK ou cheminement polygonal.",
+        items: [
+          "Implantation de la polygonale de base couvrant toute la zone d’étude",
+          "Intervisiblité des points",
+          "Rattachement au réseau RSS04",
+          "Densification du réseau par une polygonale secondaire",
+          "Création d’un canevas de référence précis pour les levés",
+          
+        ]
+      },
+      {
+        num: "Étape 02",
+        title: "Observation statique",
+        body: "L'observation statique GNSS consiste à placer des récepteurs GPS sur des points fixes pendant une durée prolongée afin de collecter des données satellitaires précises. Cette méthode permet d'obtenir des coordonnées très fiables grâce à l'accumulation des observations. Elle est particulièrement utilisée pour déterminer avec précision les points de base du réseau géodésique et améliorer la qualité globale du projet.",
+        items: [
+        "Installation des récepteurs GNSS sur des points fixes",
+        "Collecte prolongée des signaux satellites",
+        "Enregistrement des données brutes d’observation",
+        "Utilisation de stations de référence si disponibles",
+        "Amélioration de la précision des coordonnées"
+        ]
+      },
+      {
+        num: "Étape 03",
+         title: "Post-traitement",
+        body: "Le post-traitement consiste à exploiter les données GNSS collectées afin d'obtenir des coordonnées précises et corrigées. Cette étape inclut le téléchargement des données, leur traitement avec le logiciel Leica Infinity et la correction des erreurs liées aux signaux satellites. Elle permet d'améliorer significativement la précision des positions et d'assurer la fiabilité des données utilisées dans le SIG.",
+        items: [
+        "Téléchargement des données GNSS brutes(RINEX)",
+        "Traitement avec le logiciel Leica Infinity (GNSS processing)",
+        "Traitement des lignes de base et ajustements",
+        "Calcul des coordonnées finales précises",
+        "Validation des résultats obtenus"
+        ],
+         maps: [
+          { label: "Traitement des lignes de base (Leica Infinity)", src:"Leaflet/images/traite_ligneBase.jpg"}]
+      },
+      {
+        num: "Étape 04",
+        title: "Levée de détails et maillage",
+        body: "La levée de détails consiste à relever toutes les entités visibles sur le terrain telles que les bâtiments, routes, réseaux et espaces verts. Cette étape s’appuie sur le canevas géodésique mis en place précédemment. Le maillage du site pour les zones non construites est effectué afin de représenter la topographie du terrain. Il est effectué par un pas régulier n’excédant pas 10 m d’amplitude selon la structure de la zone. ",
+        items: [
+        "Relevé des détails (bâtiments, routes, équipements)",
+        "Utilisation de stations totales ou GPS différentiel",
+        "Rattachement des levés au canevas géodésique",
+        "Maillage des zones non construtes",
+        "Préparation des données pour l’intégration SIG"
+        ],
+        maps: [
+          { label: "Maillage ", src:"Leaflet/images/maillage.jpg"}]
+      },
+      {
+        num: "Étape 05",
+       title: "Restitution cartographique",
+       body: "La restitution cartographique consiste à transformer les données levées et traitées en documents cartographiques exploitables. Cette étape permet de produire des plans, cartes et supports visuels fidèles à la réalité du terrain. Elle inclut la structuration des données dans un SIG, la symbolisation des entités (bâtiments, routes, espaces verts) et la mise en forme selon des normes cartographiques. La restitution garantit une lecture claire et professionnelle des informations géographiques.",
+       items: [
+       "Intégration des données dans un logiciel SIG (QGIS/ArcGIS)",
+       "Création des couches vectorielles (points, lignes, polygones)",
+       "Symbolisation des entités selon leur nature",
+       "Mise en page cartographique (légende, échelle, titre)",
+       "Production de cartes thématiques et plans détaillés"
+        ],
+         maps: [
+          { label: "Plan d\'état des lieux (Français)", src:"Leaflet/images/finaleOccsol.png"}, 
+          { label: "Inventory Plan (English)", src:"Leaflet/images/occsol_uidt.jpg"}]
+      },
+      {
+        num: "Étape 06",
+        title: "Développement web et visualisation dynamique",
+        body: "Cette étape consiste à concevoir une plateforme web SIG permettant de visualiser et d’interagir avec les données spatiales. Les données sont intégrées dans une base de données spatiale puis publiées via des services web. Une interface cartographique interactive est développée pour permettre aux utilisateurs de consulter, filtrer et analyser les informations en temps réel. Cela facilite l’exploitation des données et la prise de décision.",
+        items: [
+        "Intégration des données dans une base PostGIS",
+        "Publication via GeoServer (WMS/WFS)",
+        "Développement de l’interface avec Leaflet",
+        "Mise en place de filtres et interactions utilisateur",
+        "Visualisation dynamique et analyse des données"
+        ]
+      }
+    ];
+
+    function setStep(el, index) {
+      document.querySelectorAll('.step').forEach(function(s) {
+        s.classList.remove('active');
+      });
+      el.classList.add('active');
+
+      var data = stepsData[index];
+      var detail = document.getElementById('step-detail');
+
+      document.getElementById('detail-num').textContent   = data.num;
+      document.getElementById('detail-title').textContent = data.title;
+      document.getElementById('detail-body').textContent  = data.body;
+
+      var itemsEl = document.getElementById('detail-items');
+      itemsEl.innerHTML = '';
+      data.items.forEach(function(item) {
+        itemsEl.innerHTML +=
+          '<div class="step-detail-item">' +
+            '<div class="step-detail-bullet"></div>' +
+            '<span>' + item + '</span>' +
+          '</div>';
+      });
+
+      var mainEl = document.querySelector('.step-detail-main');
+      var existing = mainEl.querySelector('.map-gallery');
+      if (existing) existing.remove();
+
+      if (data.maps && data.maps.length > 0) {
+        var gallery = document.createElement('div');
+        gallery.className = 'map-gallery';
+        gallery.innerHTML = '<div class="map-gallery-label">Plans cartographiques</div>';
+
+        // Tabs
+        var tabs = document.createElement('div');
+        tabs.className = 'map-tabs';
+        data.maps.forEach(function(map, i) {
+          var tab = document.createElement('button');
+          tab.className = 'map-tab' + (i === 0 ? ' active' : '');
+          tab.textContent = map.label;
+          tab.onclick = function() {
+            tabs.querySelectorAll('.map-tab').forEach(function(t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+            frameImg.src = map.src;
+            caption.querySelector('span').textContent = map.label;
+            overlayTarget = map.src;
+          };
+          tabs.appendChild(tab);
+        });
+        gallery.appendChild(tabs);
+
+        var frame = document.createElement('div');
+        frame.className = 'map-frame';
+        var frameImg = document.createElement('img');
+        frameImg.src = data.maps[0].src;
+        frameImg.alt = data.maps[0].label;
+        frame.appendChild(frameImg);
+
+        var overlayTarget = data.maps[0].src;
+
+        var caption = document.createElement('div');
+        caption.className = 'map-caption';
+        caption.innerHTML = '<span>' + data.maps[0].label + '</span><button class="map-zoom-btn" onclick="openOverlay()">Agrandir ↗</button>';
+        frame.appendChild(caption);
+        gallery.appendChild(frame);
+
+
+        window._currentMapSrc = data.maps[0].src;
+        tabs.querySelectorAll('.map-tab').forEach(function(tab, i) {
+          var origClick = tab.onclick;
+          tab.onclick = function() {
+            origClick();
+            window._currentMapSrc = data.maps[i].src;
+          };
+        });
+
+        mainEl.appendChild(gallery);
+      }
+
+
+      detail.style.animation = 'none';
+      detail.offsetHeight;
+      detail.style.animation = 'slideDown 0.25s ease';
+    }
+
+    function openOverlay() {
+      var overlay = document.getElementById('map-overlay');
+      document.getElementById('overlay-img').src = window._currentMapSrc || '';
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      document.getElementById('map-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeOverlay();
+    });
+
+
+    window.addEventListener('DOMContentLoaded', function() {
+      setStep(document.querySelector('.step.active'), 0);
+    });
+
+
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

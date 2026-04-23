@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>resultats-RGPH-5</title>
+
+    <link href="leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="leaflet/mesure/src/Leaflet.LinearMeasurement.css">
+    <link rel="stylesheet" href="leaflet/Layers/css/styledLayerControl.css">
+
+
+    <script src=leaflet/leaflet.js></script>
+    <script  type="text/javascript" src="leaflet/mesure/src/Leaflet.LinearMeasurement.js"></script>
+    <script type="text/javascript" src="leaflet/Layers/src/styledLayerControl.js"></script>
+    <script src="jquery.js"></script>  
+
+    
+    <style>
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        
+        .navbar {
+            display: flex;
+            align-items: center;
+            background-color: #1d3557;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .navbar img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .navbar-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        
+        .left-column {
+            background-color: #eaeaea;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-column h1 {
+            color: #1d3557;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .left-column p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        
+        .right-column {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .right-column h2 {
+            color: #1d3557;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .right-column .placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            background-color: #f1f1f1;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            color: #888;
+            font-style: italic;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .legend {
+            background: white;
+            padding: 10px;
+            line-height: 1.5;
+            font-size: 14px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .legend i {
+            width: 20px;
+            height: 20px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.8;
+        }
+
+        
+
+        .tab-menu {
+            display: flex;
+            border-bottom: 2px solid #eaeaea;
+        }
+
+        .tab-menu button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background-color: #f1f1f1;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tab-menu button.active {
+            background-color: #1d3557;
+            color: white;
+        }
+
+        .tab-content {
+            margin-top: 20px;
+        }
+
+        .tab-content .tab {
+            display: none;
+        }
+
+        .tab-content .tab.active {
+            display: block;
+        }
+
+        
+        .tab img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #1d3557;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <img src="Leaflet/images/ANSD.jpg" alt="Icône ou image descriptive">
+    <div class="navbar-title">Données sur la densité de la population au Sénégal</div>
+</div>
+
+
+<div class="main-content">
+
+    <div class="left-column">
+        <h1>Densité de la Population</h1>
+        <p>
+            En 2023, la densité de la population s’élève à 92 habitants au kilomètre carré. Au Sénégal, la 
+population est répartie de façon inégale dans l’espace. En effet, les populations sont
+concentrées dans les régions de l’Ouest et du Centre du pays. A l’opposé, les régions situées 
+au Nord et à l’Est du territoire sont faiblement peuplés.
+        </p>
+        <p>
+            La densité de population a connu une augmentation régulière au cours des différents 
+recensements. De 25 habitants/km² en 1976, puis 35 habitants/km² en 1988, elle est
+passée à 50 habitants/km² en 2002 et à 65 habitants/km² en 2013, avant de s’établir à 
+92 habitants/km² en 2023. Cette hausse continue de la densité de population suit celle
+de la population totale
+        </p>
+        <p>
+            Vous pouvez consulter des statistiques détaillées, explorer des graphiques,
+            et analyser des cartes interactives à droite de cette page.
+        </p>
+    </div>
+
+   <div class="right-column">
+
+    <div class="tab-menu">
+        <button class="tab-button active" data-target="map">Carte</button>
+        <button class="tab-button" data-target="chart">Graphique</button>
+        <button class="tab-button" data-target="table">Tableau</button>
+    </div>
+
+
+    <div class="tab-content">
+
+         
+        <div id="map" class="tab active"></div>
+        <script>
+            const map = L.map('map').setView([14.4974, -14.4524], 7); 
+    
+           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+    
+            function getColor(d) {
+                return d > 1000 ? '#800026' :
+                       d > 450  ? '#E31A1C' :
+                       d > 260  ? '#FC4E2A' :
+                       d > 130  ? '#FD8D3C' :
+                       d > 75  ? '#FEB24C' :
+                       d > 30   ? '#FED976' :
+                                  '#FFEDA0';
+            }
+    
+            // Style des polygones
+            function style(feature) {
+                return {
+                    fillColor: getColor(feature.properties.densité_k),
+                    weight: 2,
+                    opacity: 1,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.7
+                };
+            }
+    
+            const legend = L.control({position: 'topright'});
+    
+            legend.onAdd = function () {
+                const div = L.DomUtil.create('div', 'legend'),
+                    grades = [0, 30, 75, 130, 260, 450, 1000],
+                    labels = [];
+    
+                div.innerHTML = '<b>Densité (hab/km²)</b><br>';
+                for (let i = 0; i < grades.length; i++) {
+                    div.innerHTML +=
+                        '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                }
+                return div;
+            };
+    
+            legend.addTo(map);
+    
+        
+            function onEachFeature(feature, layer) {
+                if (feature.properties) {
+                    layer.bindTooltip(
+                        `<strong>${feature.properties.nomreg}</strong><br>
+                        Densité : ${feature.properties.densité_k} hab/km²<br>
+                        Année : 2023`
+                    );
+                }
+            }
+    
+            fetch('http://localhost/Base_Géomatique_SI/api/api_sociodemographique.php')
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        style: style,
+                        onEachFeature: onEachFeature
+                    }).addTo(map);
+                })
+                .catch(error => console.error('Erreur lors du chargement des données :', error));
+        </script>
+       
+
+        <div id="chart" class="tab">
+            <img src="Leaflet/images/densite_pop.png" alt="Graphique de la densité de la population">
+        </div>
+    
+
+
+        <div id="table" class="tab">
+            <table>
+                <thead>
+                     <tr>
+                        <th>Région</th>
+                        <th>Population</th>
+                        <th>Superficie (km²)</th>
+                        <th>Densité (hab/km²)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dakar</td>
+                        <td>4,004,426</td>
+                        <td>535</td>
+                        <td>7,478</td>
+                    </tr>
+                    <tr>
+                        <td>Ziguinchor</td>
+                        <td>617,567</td>
+                        <td>7,3291</td>
+                        <td>84</td>
+                    </tr>
+                    <tr>
+                        <td>Diourbel</td>
+                        <td>2,080,333</td>
+                        <td>4,860</td>
+                        <td>428</td>
+                    </tr>
+                    <tr>
+                        <td>Saint-Louis</td>
+                        <td>1,202,441</td>
+                        <td>19,010</td>
+                        <td>63</td>
+                    </tr>
+                    <tr>
+                        <td>Tambacounda</td>
+                        <td>987,152</td>
+                        <td>46,613</td>
+                        <td>23</td>
+                    </tr>
+                    <tr>
+                        <td>Kaolack</td>
+                        <td>1,336,720</td>
+                        <td>5,310</td>
+                        <td>252</td>
+                    </tr>
+                    <tr>
+                        <td>Thies</td>
+                        <td>2,463,677</td>
+                        <td>6,586</td>
+                        <td>374</td>
+                    </tr>
+                    <tr>
+                        <td>Louga</td>
+                        <td>1,125,608</td>
+                        <td>25,619</td>
+                        <td>44</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<script>
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabs = document.querySelectorAll('.tab');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            button.classList.add('active');
+            document.getElementById(button.dataset.target).classList.add('active');
+        });
+    });
+</script>
+
+
+
+
+</div>
+</div>
+</body>
+</html>

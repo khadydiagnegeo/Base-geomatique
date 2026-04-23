@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartographie de la population
+    </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>resultats-RGPH-5</title>
+
+    <link href="leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="leaflet/mesure/src/Leaflet.LinearMeasurement.css">
+    <link rel="stylesheet" href="leaflet/Layers/css/styledLayerControl.css">
+
+
+    <script src=leaflet/leaflet.js></script>
+    <script  type="text/javascript" src="leaflet/mesure/src/Leaflet.LinearMeasurement.js"></script>
+    <script type="text/javascript" src="leaflet/Layers/src/styledLayerControl.js"></script>
+    <script src="js/jquery.js"></script>  
+</head>
+<style>
+    #map {
+        width: 100%;
+        height: 500px;
+        margin: 10px;
+    }
+</style>
+
+<body>
+        <div id="map"></div>
+
+    <script>
+
+        var map = L.map('map').setView([14, -14.78682], 7);
+
+
+function getUrbanColor(d) {
+    return d > 3000000 ? '#0c2c84' :
+           d > 1000000 ? '#225ea8' :
+           d > 500000  ? '#1d91c0' :
+           d > 200000  ? '#41b6c4' :
+           d > 100000  ? '#7fcdbb' :
+                         '#c7e9b4';
+}
+
+function styleUrban(feature) {
+    return {
+        fillColor: getUrbanColor(feature.properties.total_u),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+
+
+//legende pour la population urbaine
+const urbanLegend = L.control({ position: 'topright' });
+urbanLegend.onAdd = function () {
+    const div = L.DomUtil.create('div', 'legend'),
+          grades = [0, 100000, 200000, 500000, 1000000, 3000000],
+          labels = [];
+
+    div.innerHTML = '<b>Population urbaine</b><br>';
+    for (let i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getUrbanColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+    return div;
+};
+
+fetch('http://localhost/web_demographique/api/api_sociodemographique.php')
+                .then(response => response.json())
+                .then(data => {
+                    L.geoJSON(data, {
+                        style: styleUrban,
+                        onEachFeature: function (feature,layer) {
+                layer.bindTooltip(
+                    `<strong>${feature.properties.nomreg}</strong><br>
+                     Population urbaine : ${feature.properties.total_u}<br>`
+                )}
+                
+                 }
+                 ).addTo(map)}
+                 )
+
+    urbanLegend.addTo(map);
+                 
+    </script>
+</body>
+
+</html>

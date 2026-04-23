@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte d'Occupation du Sol</title>
+    <link href="leaflet/leaflet.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="leaflet/Layers/css/styledLayerControl.css">
+
+    <script src="leaflet/leaflet.js"></script>
+    <script type="text/javascript" src="leaflet/Layers/src/styledLayerControl.js"></script>
+    
+    <style>
+        #map {
+            width: 100%;
+            height: 98vh;
+        }
+        #legend {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Assurez-vous qu'il est au-dessus de la carte */
+    display: none; /* Masqué par défaut */
+}
+#legend h3 {
+    margin: 0 0 8px;
+    font-size: 10px;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.legend-item i {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #000;
+}
+
+
+         /* Navbar  */
+         .navbar {
+            display: flex;
+            align-items: center;
+            background-color: #1a6de1;
+            color: white;
+            padding: 14px 40px;
+        }
+
+        .navbar img {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .navbar-title {
+    font-size: 15px;
+    font-weight: 700;
+        }
+    
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr; 
+            gap: 20px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .left-column {
+            background-color: #eaeaea;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-column h1 {
+            color: #1f2398;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .left-column p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .left-column label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+    color: #2f15c3;
+}
+
+.left-column select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+    <img src="Leaflet/images/logo_UIDT.png" alt="Icône ou image descriptive">
+    <div class="navbar-title">Base Géomatique UFR sciences de l'ingenieur - Projet integrateur Promo 2</div>
+</div>
+
+<div class="main-content">
+
+    <div class="left-column">
+        <h1>Occupation du sol de l'IUDT</h1>
+        <p>
+            Cette interface vous permet de visualiser l'occupation du sol de l'universite Iber Der Thiam de Thies.
+            Elle vous permet de voir la distribution des locaux selon les differents etablissements qui s'y touvent. 
+        </p>
+        <p>
+            Nous vous offrons aussi la passiblite de trouver la structure la plus de vous
+        </p>
+        <p>
+            Vous pouvez consulter les differentes fonctionnalites du site.
+        </p>
+
+        <select onchange="select_structure(this.value)">
+            <option value="">Vous voulez afficher les batiments de quel établissement de l'université ?</option>
+            <option value="UFR SI">UFR Sciences de l'ingenieur(SI)</option>
+            <option value="IUT">L'institut universitaire et technologie(IUT)</option>
+            <option value="UFR SET">UFR Sciences et technologies(SET)</option>
+            <option value="UFR SES">UFR Sciences économiques et sociales(SES)</option>
+            <option value="Rectorat">Le rectorat</option>
+        </select>
+        <p>Cochez la case si vous voulez afficher toute l'occupation du sol de l'université</p>
+        <div class="sidebar-section">
+            <label>
+                <input type="checkbox" id="showAllOccupationCheckbox" onchange="toggleAllOccupation(this.checked)">
+                Afficher toute l'occupation du sol.
+            </label>
+        </div>
+
+        <p>Vous pouvez afficher les unites spatiales definies</p>
+        <select onchange="select_unite_spatiale(this.value)">
+            <option value='*'> Selectionner tout </option>
+            <option value=''> Aucune selection </option>
+            <option value='1'> Batiments</option>
+            <option value='2'>Allees</option>
+            <option value='3'>Routes</option>
+            <option value='4'>Regards</option>
+            <option value='5'>Paves</option>
+            <option value='6'>Canal</option>
+            <option value='8'>Espace jeu</option>
+            <option value='11'>pisciculture</option>
+            <option value='13'>Transformateur</option>
+            <option value='14'>Ouvrage hydrolyque</option>
+            <option value='17'>champ de papayes</option>
+            <option value='22'>Sol nu</option>
+            <option value='24'>Espace vert</option>
+            <option value='25'>Espace publique</option>
+
+            </select>
+
+            
+    </div>
+    
+    <script>
+var unite_spatiale = new L.FeatureGroup();
+unite_spatiale.addTo(map);
+
+      function select_unite_spatiale(value) {
+
+    if (!value) {
+        unite_spatiale.clearLayers(); 
+        return;
+    }
+
+    if (value === '*') {
+        toggleAllOccupation(true);
+        return;
+    }
+    fetch(`api/api_select_entite.php?code=${value}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données');
+            }
+            return response.json();
+        })
+        .then(result => {
+            unite_spatiale.clearLayers();
+
+            L.geoJSON(result, {
+                style: style,
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(`
+                        <table class="popup-table">
+                            <tr><td>Entité spatiale</td><td>${feature.properties.label}</td></tr>
+                        </table>
+                    `);
+                }
+            }).addTo(unite_spatiale);
+
+            if (unite_spatiale.getLayers().length > 0) {
+                map.fitBounds(unite_spatiale.getBounds());
+            }
+        })
+        .catch(error => {
+            alert("Erreur lors de la récupération des données.");
+            console.error(error);
+        });
+}
+    </script>
+
+    <div id="map"></div>
+    <div id="legend">
+        <h3>Légende</h3>
+        <div id="legend-content"></div>
+    </div>
+    <script>
+        var map = L.map('map').setView([14, -14.78682], 7);
+
+
+        var g_satellite = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 23,
+        attributions: ['Powered by Esri', 'Source: Esri, DigitalGlobe, GeoEye, Earthstar Geographics'],
+        id: 'mapbox/light-v9',
+});
+	    var g_terrain  = L.tileLayer('https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 23,
+        attributions: ['Powered by Esri','Source: Esri, FAO, NOAA'],
+        id: 'mapbox/light-v9'});
+        
+
+
+        // var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        //     attribution: 'Données © OpenStreetMap contributors'
+        // }).addTo(map);
+
+        // Groupe pour les données d'occupation du sol
+        // var occsol = new L.featureGroup().addTo(map);
+
+        // Fonction pour attribuer une couleur en fonction du code d'occupation du sol
+         // Couleurs associées aux codes d'occupation du sol
+
+         
+         var colors = {
+            1: '#FF0000', // Bâtiment
+            2: '#696969', // Allées
+            3: '#363636', // Route
+            4: '#7C0A02', // Regards
+            5: '#A9A9A9', // Pavé
+            6: '#87CEFA', // Canal / Ravin d'eau
+            8: '#FFFFE0' , // Terrain de jeu
+            11: '#AFEEEE',//pisciculture
+            13: '#FF7F50',//transformateur
+            11: '#E0FFFF',//ouvrage hydrolyque
+            17: '#90EE90',//champ papaye
+            20: '#A9A9A9', // Pavé
+            14:'#00008B',//ouvrage hydrolyque
+            22: '#FFEB99',//sol nu
+
+            24: '#008000',//espace vert
+            25: '#800000'//espace publique
+        };
+
+
+
+
+
+var serveur_wms = new L.featureGroup();
+serveur_wms.addTo(map);
+
+var url_geo_serveur = "http://localhost:8080";
+
+var fond = L.tileLayer.wms(url_geo_serveur + "/geoserver/wms", {
+    layers: 'uidt_thies:Kd_Fond de carte', 
+    format: 'image/png',
+    transparent: true,
+
+});
+fond.addTo(serveur_wms);
+
+
+function updateLegend() {
+    const legendContent = document.getElementById('legend-content');
+    if (!legendContent) {
+        console.error("L'élément avec l'ID 'legend-content' est introuvable.");
+        return;
+    }
+
+    legendContent.innerHTML = ""; 
+
+    Object.entries(occupationData).forEach(([code, { label, color }]) => {
+        const legendItem = `
+            <div class="legend-item">
+                <i style="background-color: ${color};"></i>
+                <span>${label}</span>
+            </div>
+        `;
+        legendContent.innerHTML += legendItem;
+    });
+}
+
+
+const occupationData = {
+    1: { label: "Batiment", color: "#FF0000" },
+    2: { label: "Allées", color: "#696969" },
+    3: { label: "Routes", color: "#363636" },
+    4: { label: "Regards", color: "#7C0A02" },
+    5: { label: "Pavé", color: "#A9A9A9" },
+    6: { label: "Canal", color: "#87CEFA" },
+    7: { label: "Terrain jeu", color: "#FFFFE0" },
+    8: { label: "pisciculture", color: "#AFEEEE" },
+    9: { label: "transformateur", color: "#FF0F50" },
+    10: { label: "ouvrage hydraulyque", color: "#E0FFFF" },
+    11: { label: "champ de Papaye", color: "#90EE90" },
+    12: { label: "sol nu", color: "#FFEB99" },
+    14: { label: "Espace vert", color: "#008000" },
+    15: { label: "Espace publique", color: "#800000" },
+   
+    
+           
+    //         6: '#87CEEB', // Canal / Ravin d'eau
+    //         8: '#FFD700' , // Terrain de jeu
+    //         11: '#ADD8E6',//pisciculture
+    //         13: '#FF7F50',//transformateur
+    //         11: '#00008B',//ouvrage hydrolyque
+    //         17: '#228B22',//champ papaye
+    //         22: '#FFA07A',//sol nu
+    //         24: '#008000',//espace vert
+    //         25: '#FFA07A'/
+};
+
+
+
+
+
+
+var occsol = new L.featureGroup().addTo(map);
+
+function toggleAllOccupation(isChecked) {
+    const legend = document.getElementById('legend'); 
+
+    if (isChecked) {
+        fetch('api/api_occsol.php') 
+            .then(response => response.json())
+            .then(result => {
+                occsol.clearLayers(); 
+                L.geoJSON(result, {
+                    style: style,
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(`
+                            <table class="popup-table">
+                                <tr><td>Cette entité représente:</td><td>${occupationData[feature.properties.code]?.label || "Inconnu"}</td>  
+                                    </tr>
+                                    <tr><td>Avec une superficie en m2 de:</td><td>${feature.properties.superficie}</td></tr>
+                                    
+                                    </tr>
+                            </table>
+                        `);
+                    }
+                }).addTo(occsol);
+
+                map.fitBounds(occsol.getBounds());
+                updateLegend(); 
+                legend.style.display = 'block'; 
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération des données d'occupation du sol :", error);
+            });
+    } else {
+        occsol.clearLayers(); 
+        legend.style.display = 'none'; 
+    }
+}
+
+
+
+
+
+function ocsol_couleur(code) {
+        return colors[code] || '#FFFFE0'; 
+        }
+
+        
+// Fonction de style pour les entités GeoJSON
+function style(feature) {
+    return {
+            fillColor: ocsol_couleur(feature.properties.code),
+            weight: 1, 
+            opacity: 1, 
+            color: '#000000',
+            dashArray: '', 
+            fillOpacity: 0.7 
+            };
+        }
+
+var structure = new L.FeatureGroup();
+structure.addTo(map);
+
+function select_structure(structure_ap) {
+    fetch(`api/api_select_structure.php?structure=${structure_ap}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données');
+            }
+            return response.json();
+        })
+        .then(result => {
+            structure.clearLayers(); 
+            L.geoJSON(result, {
+                style: style,
+                onEachFeature: function (feature, layer) {
+
+                    layer.bindPopup(`
+                        <table class="popup-table">
+                            <tr><td>Nom:</td><td>${feature.properties.nom}</td></tr>
+                            <tr><td>Etablissement:</td><td>${feature.properties.structure}</td></tr>
+                            <tr><td>Superficie en m2:</td><td>${feature.properties.superficie}</td></tr>
+                        </table>
+                    `);
+                }
+            }).addTo(structure);
+
+        
+            map.fitBounds(structure.getBounds());
+        })
+        .catch(error => {
+            alert("Attention, il y a des erreurs lors de la récupération des données.");
+            console.error(error);
+        });
+}
+
+
+
+
+var baseMaps = [
+                { 
+                    groupName : "Google Base Maps",
+                    expanded : true,
+                    layers    : {
+                        "Satellite" :  g_satellite,
+                        "Terrain"   :  g_terrain,
+                        "Ma carte de fond": serveur_wms
+                
+                    }
+                } 
+            ]
+
+
+var options = {
+                container_width 	: "300px",
+                container_maxHeight : "350px", 
+                group_maxHeight     : "80px",
+                exclusive       	: false
+};
+var control = L.Control.styledLayerControl(baseMaps,options);
+map.addControl(control);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // // Chargement des données GeoJSON via fetch
+        // fetch('http://localhost/web_demographique/api/api_occsol.php')
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         var monApi = L.geoJSON(data, {
+        //             style: style,
+        //             onEachFeature: function (feature, layer) {
+        //                 layer.bindTooltip(
+        //                     `<strong>${feature.properties.nom}</strong><br>
+        //                      Label : ${feature.properties.label}`
+        //                 );
+        //             }
+        //         })
+
+        //         // Ajuster la vue de la carte à l'étendue des données
+        //         map.fitBounds(occsol.getBounds())
+        //     })
+        //     .catch(error => console.error('Erreur lors du chargement des données :', error));
+
+///////////////////////////////////////////////////// Ajouter une légende
+        // var legend = L.control({ position: 'bottomright' });
+
+        // legend.onAdd = function (map) {
+        //     var div = L.DomUtil.create('div', 'legend');
+        //     div.innerHTML += `<h4>Légende</h4>`;
+        //     for (var key in colors) {
+        //         div.innerHTML +=
+        //             `<i style="background: ${colors[key]}"></i> Code ${key}<br>`;
+        //     }
+        //     return div;
+        // };
+
+        // legend.addTo(map);
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
