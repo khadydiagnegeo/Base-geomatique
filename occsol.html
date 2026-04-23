@@ -499,47 +499,6 @@ map.addControl(control);
 
 
 
-
-
-
-
-
-
-
-        // // Chargement des données GeoJSON via fetch
-        // fetch('http://localhost/web_demographique/api/api_occsol.php')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         var monApi = L.geoJSON(data, {
-        //             style: style,
-        //             onEachFeature: function (feature, layer) {
-        //                 layer.bindTooltip(
-        //                     `<strong>${feature.properties.nom}</strong><br>
-        //                      Label : ${feature.properties.label}`
-        //                 );
-        //             }
-        //         })
-
-        //         // Ajuster la vue de la carte à l'étendue des données
-        //         map.fitBounds(occsol.getBounds())
-        //     })
-        //     .catch(error => console.error('Erreur lors du chargement des données :', error));
-
-///////////////////////////////////////////////////// Ajouter une légende
-        // var legend = L.control({ position: 'bottomright' });
-
-        // legend.onAdd = function (map) {
-        //     var div = L.DomUtil.create('div', 'legend');
-        //     div.innerHTML += `<h4>Légende</h4>`;
-        //     for (var key in colors) {
-        //         div.innerHTML +=
-        //             `<i style="background: ${colors[key]}"></i> Code ${key}<br>`;
-        //     }
-        //     return div;
-        // };
-
-        // legend.addTo(map);
-
     </script>
 </body>
 </html>
